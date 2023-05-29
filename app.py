@@ -21,7 +21,7 @@ if "qa" not in st.session_state:
 # Prompt
 template = """
 質問に日本語で回答してください。
-# 質問：{question}
+# 質問：・{question}
 # 回答：
 """
 
