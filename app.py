@@ -7,6 +7,7 @@ from langchain.text_splitter import CharacterTextSplitter
 # from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
+# from langchain.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from PIL import Image
 import os
@@ -55,7 +56,7 @@ def get_vector_db(pdf):
 #     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
 #     texts = text_splitter.split_documents(documents)
     embeddings = OpenAIEmbeddings()
-    return Chroma.from_documents(texts, embeddings)
+    return Chroma.from_texts(texts, embeddings)
 
 def store_del_msg():
     st.session_state["qa"].append({"role": "Q", "msg": st.session_state["user_input"]}) # store
