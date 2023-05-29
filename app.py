@@ -64,13 +64,12 @@ def store_del_msg():
 
 # View (User Interface)
 ## Sidebar
-st.sidebar.title("補助金さん")
-st.sidebar.write("補助金・助成金についてお任せあれ")
+st.sidebar.title("ＰＤＦアシスタント")
 uploaded_file = st.sidebar.file_uploader("PDFファイルをアップロードして下さい", type=["pdf"])
 if uploaded_file is not None:
     user_input = st.sidebar.text_input("ご質問をどうぞ", key = "user_input", on_change = store_del_msg)
-    st.sidebar.markdown("---")
-    st.sidebar.write(uploaded_file.name)
+#     st.sidebar.markdown("---")
+#     st.sidebar.write(uploaded_file.name)
     ## Main Content
     if st.session_state["qa"]:
         for message in st.session_state["qa"][1:]:
