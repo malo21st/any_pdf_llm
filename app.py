@@ -50,7 +50,7 @@ def get_vector_db(pdf):
     text_splitter = CharacterTextSplitter(
         separator="\n",
         chunk_size=1000,
-        chunk_overlap=0,
+        chunk_overlap=200,
         length_function=len
     )
     texts = text_splitter.split_text(documents)
