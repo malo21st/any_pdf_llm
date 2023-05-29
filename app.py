@@ -43,8 +43,16 @@ def get_vector_db(pdf):
     documents = ""
     for page in pdf_reader.pages:
         documents += page.extract_text()
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
-    texts = text_splitter.split_documents(documents)
+    # split into chunks
+    text_splitter = CharacterTextSplitter(
+    separator="\n",
+    chunk_size=1000,
+    chunk_overlap=0,
+    length_function=len
+    )
+    texts = text_splitter.split_text(documents)
+#     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+#     texts = text_splitter.split_documents(documents)
     embeddings = OpenAIEmbeddings()
     return Chroma.from_documents(texts, embeddings)
 
