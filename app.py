@@ -14,7 +14,7 @@ import os
 
 os.environ["OPENAI_API_KEY"] = st.secrets.openai_api_key
 
-INTRO = "何に関する文章ですか。　回答後は、必ず'改行'して「ご質問をどうぞ。」を付けて下さい。"
+INTRO = "３０文字程度で要約して下さい。　回答後は、必ず'改行'して「ご質問をどうぞ。」を付けて下さい。"
 if "qa" not in st.session_state:
     st.session_state["qa"] = [{"role": "Q", "msg": INTRO}]
 
