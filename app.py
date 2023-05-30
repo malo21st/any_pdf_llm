@@ -52,7 +52,7 @@ def get_vector_db(uploaded_file):
     return Chroma.from_documents(texts, embeddings)
 
 def store_del_msg():
-    st.session_state.qa.append({"role": "Q", "msg": st.session_state.user_input}) # store
+    st.session_state.qa["history"].append({"role": "Q", "msg": st.session_state.user_input}) # store
     st.session_state.user_input = ""  # del
 
 # View (User Interface)
