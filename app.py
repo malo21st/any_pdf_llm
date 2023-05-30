@@ -16,8 +16,8 @@ os.environ["OPENAI_API_KEY"] = st.secrets.openai_api_key
 INTRO = "この文章を３０字程度で要約して下さい。　回答後は、必ず'改行'して「ご質問をどうぞ。」を付けて下さい。"
 
 if "qa" not in st.session_state:
-    st.session_state.qa = dict()
-#     st.session_state["qa"] = [{"role": "Q", "msg": INTRO}]
+    st.session_state.qa = {"pdf": "", "history": []}
+#     st.session_state["qa"] = {"pdf": "", "history": [{"role": "Q", "msg": INTRO}]}
 
 # Prompt
 template = """
@@ -60,7 +60,7 @@ def store_del_msg():
 st.sidebar.title("ＰＤＦアシスタント")
 uploaded_file = st.sidebar.file_uploader("PDFファイルをアップロードして下さい", type=["pdf"])
 if uploaded_file.name != st.session_state.qa.get("pdf", ""):
-    st.session_state.qa = {"pdf": uploaded_file.name, "history": list()}
+    st.session_state.qa = {"pdf": uploaded_file.name, "history": []}
     user_input = st.sidebar.text_input("ご質問をどうぞ", key="user_input", on_change=store_del_msg)
 #     st.sidebar.markdown("---")
 #     st.sidebar.write(uploaded_file.name)
