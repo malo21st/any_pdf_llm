@@ -74,7 +74,7 @@ if uploaded_file is not None:
                 st.success(message["msg"])
             elif message["role"] == "E": # E: Error
                 st.error(message["msg"])
-        chat_box = st.empty() # Streaming message
+    chat_box = st.empty() # Streaming message
 
     # Model (Business Logic)
     vectordb = get_vector_db(uploaded_file)
