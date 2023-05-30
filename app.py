@@ -46,7 +46,7 @@ def get_vector_db(uploaded_file):
     with NamedTemporaryFile(dir='.', suffix='.pdf') as f:
         f.write(uploaded_file.getbuffer())
         loader = PyPDFLoader(f.name)
-    documents = loader.load()
+        documents = loader.load()
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
     texts = text_splitter.split_documents(documents)
     embeddings = OpenAIEmbeddings()
