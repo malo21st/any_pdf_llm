@@ -61,7 +61,6 @@ def store_del_msg():
 st.sidebar.title("ＰＤＦアシスタント")
 uploaded_file = st.sidebar.file_uploader("PDFファイルをアップロードして下さい", type=["pdf"])
 if uploaded_file is not None:
-    st.write(dir(uploaded_file))
     user_input = st.sidebar.text_input("ご質問をどうぞ", key = "user_input", on_change = store_del_msg)
 #     st.sidebar.markdown("---")
 #     st.sidebar.write(uploaded_file.name)
@@ -78,7 +77,7 @@ if uploaded_file is not None:
     chat_box=st.empty() # Streaming message
 
     # Model (Business Logic)
-    vectordb = get_vector_db(uploaded_file.name)
+    vectordb = get_vector_db(uploaded_file)
     stream_handler = StreamHandler(chat_box)
     chat_llm = ChatOpenAI(model_name = "gpt-3.5-turbo", streaming = True, callbacks = [stream_handler])
     qa = RetrievalQA.from_chain_type(llm = chat_llm, chain_type = "stuff", retriever = vectordb.as_retriever())
