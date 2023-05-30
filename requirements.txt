@@ -4,3 +4,4 @@ chromadb
 pypdf
 tiktoken
 PyPDF2
+tempfile
