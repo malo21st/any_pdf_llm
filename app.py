@@ -15,10 +15,10 @@ import os
 
 os.environ["OPENAI_API_KEY"] = st.secrets.openai_api_key
 
-INTRO = "３０文字程度で要約して下さい。　回答後は、必ず'改行'して「ご質問をどうぞ。」を付けて下さい。"
+INTRO = "この文章を３０字程度で要約して下さい。　回答後は、必ず'改行'して「ご質問をどうぞ。」を付けて下さい。"
 if "qa" not in st.session_state:
-    st.session_state["qa"] = []
-#     st.session_state["qa"] = [{"role": "Q", "msg": INTRO}]
+#     st.session_state["qa"] = []
+    st.session_state["qa"] = [{"role": "Q", "msg": INTRO}]
 
 # Prompt
 template = """
@@ -66,8 +66,8 @@ if uploaded_file is not None:
 #     st.sidebar.write(uploaded_file.name)
     ## Main Content
     if st.session_state["qa"]:
-        for message in st.session_state["qa"]:
-#         for message in st.session_state["qa"][1:]:
+#         for message in st.session_state["qa"]:
+        for message in st.session_state["qa"][1:]:
             if message["role"] == "Q": # Q: Question (User)
                 st.info(message["msg"])
             elif message["role"] == "A": # A: Answer (AI Assistant)
