@@ -9,6 +9,7 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
 from langchain.document_loaders import TextLoader, PyPDFLoader
 from langchain.chains import RetrievalQA
+from tempfile import NamedTemporaryFile
 from PIL import Image
 import os
 
@@ -41,8 +42,10 @@ class StreamHandler(BaseCallbackHandler):
         self.container.success(self.text) 
 
 @st.cache_resource
-def get_vector_db(pdf):
-    loader = PyPDFLoader(pdf)
+def get_vector_db(uploaded_file):
+    with NamedTemporaryFile(dir='.', suffix='.pdf') as f:
+        f.write(uploaded_file.getbuffer())
+        loader = PyPDFLoader(f.name)
     documents = loader.load()
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
     texts = text_splitter.split_documents(documents)
