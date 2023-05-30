@@ -4,7 +4,7 @@ from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import ChatOpenAI
 from langchain import PromptTemplate
 from langchain.text_splitter import CharacterTextSplitter
-# from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
 # from langchain.vectorstores import FAISS
@@ -42,22 +42,12 @@ class StreamHandler(BaseCallbackHandler):
 
 @st.cache_resource
 def get_vector_db(pdf):
-    pdf_reader = PdfReader(pdf)
-    documents = ""
-    for page in pdf_reader.pages:
-        documents += page.extract_text()
-    # split into chunks
-    text_splitter = CharacterTextSplitter(
-        separator="\n",
-        chunk_size=1000,
-        chunk_overlap=200,
-        length_function=len
-    )
-    texts = text_splitter.split_text(documents)
-#     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
-#     texts = text_splitter.split_documents(documents)
+    loader = PyPDFLoader(pdf)
+    documents = loader.load()
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+    texts = text_splitter.split_documents(documents)
     embeddings = OpenAIEmbeddings()
-    return Chroma.from_texts(texts, embeddings)
+    return Chroma.from_documents(texts, embeddings)
 
 def store_del_msg():
     st.session_state["qa"].append({"role": "Q", "msg": st.session_state["user_input"]}) # store
