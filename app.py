@@ -1,9 +1,7 @@
 import streamlit as st
-# from PyPDF2 import PdfReader
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import ChatOpenAI
 from langchain import PromptTemplate
-# from langchain.text_splitter import CharacterTextSplitter
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
@@ -16,8 +14,9 @@ import os
 os.environ["OPENAI_API_KEY"] = st.secrets.openai_api_key
 
 INTRO = "この文章を３０字程度で要約して下さい。　回答後は、必ず'改行'して「ご質問をどうぞ。」を付けて下さい。"
+
 if "qa" not in st.session_state:
-    st.session_state.qa = list()
+    st.session_state.qa = dict()
 #     st.session_state["qa"] = [{"role": "Q", "msg": INTRO}]
 
 # Prompt
@@ -60,13 +59,14 @@ def store_del_msg():
 ## Sidebar
 st.sidebar.title("ＰＤＦアシスタント")
 uploaded_file = st.sidebar.file_uploader("PDFファイルをアップロードして下さい", type=["pdf"])
-if uploaded_file is not None:
+if uploaded_file.name != st.session_state.qa.get("pdf", ""):
+    st.session_state.qa = {"pdf": uploaded_file.name, "history": list()}
     user_input = st.sidebar.text_input("ご質問をどうぞ", key="user_input", on_change=store_del_msg)
 #     st.sidebar.markdown("---")
 #     st.sidebar.write(uploaded_file.name)
     ## Main Content
-    if st.session_state.qa:
-        for message in st.session_state.qa:
+    if st.session_state.qa["history"]:
+        for message in st.session_state.qa["history"]:
 #         for message in st.session_state["qa"][1:]:
             if message["role"] == "Q": # Q: Question (User)
                 st.info(message["msg"])
@@ -82,11 +82,11 @@ if uploaded_file is not None:
     chat_llm = ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True, callbacks=[stream_handler])
     qa = RetrievalQA.from_chain_type(llm=chat_llm, chain_type="stuff", retriever=vectordb.as_retriever())
     if st.session_state.qa:
-        query = "・" + st.session_state.qa[-1]["msg"]
+        query = "・" + st.session_state.qa["history"][-1]["msg"]
         try:
             response = qa.run(query) # Query to ChatGPT
-            st.session_state.qa.append({"role": "A", "msg": response})
+            st.session_state.qa["history"].append({"role": "A", "msg": response})
         except Exception:
             response = "エラーが発生しました！　もう一度、質問して下さい。"
             st.error(response)
-            st.session_state.qa.append({"role": "E", "msg": response})
+            st.session_state.qa.qa["history"].append({"role": "E", "msg": response})
