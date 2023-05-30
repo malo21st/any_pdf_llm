@@ -59,8 +59,9 @@ def store_del_msg():
 ## Sidebar
 st.sidebar.title("ＰＤＦアシスタント")
 uploaded_file = st.sidebar.file_uploader("PDFファイルをアップロードして下さい", type=["pdf"])
-if uploaded_file.name != st.session_state.qa.get("pdf", ""):
-    st.session_state.qa = {"pdf": uploaded_file.name, "history": []}
+if uploaded_file is not None:
+    if uploaded_file.name != st.session_state.qa.get("pdf", ""):
+        st.session_state.qa = {"pdf": uploaded_file.name, "history": []}
     user_input = st.sidebar.text_input("ご質問をどうぞ", key="user_input", on_change=store_del_msg)
 #     st.sidebar.markdown("---")
 #     st.sidebar.write(uploaded_file.name)
