@@ -23,7 +23,7 @@ if "qa" not in st.session_state:
 template = """
 質問に日本語で回答してください。
 # 質問：{question}
-# 回答：
+# 回答 IN JAPANESE：
 """
 
 prompt = PromptTemplate(
@@ -80,7 +80,7 @@ if uploaded_file is not None:
     # Model (Business Logic)
     vectordb = get_vector_db(uploaded_file)
     stream_handler = StreamHandler(chat_box)
-    chat_llm = ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True, callbacks=[stream_handler])
+    chat_llm = ChatOpenAI(model_name="gpt-3.5-turbo", streaming=True, callbacks=[stream_handler], temperature=0)
     qa = RetrievalQA.from_chain_type(llm=chat_llm, chain_type="stuff", retriever=vectordb.as_retriever())
     if st.session_state.qa["history"]:
         query = "・" + st.session_state.qa["history"][-1]["msg"]
