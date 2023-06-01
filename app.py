@@ -10,6 +10,9 @@ from langchain.chains import RetrievalQA
 from tempfile import NamedTemporaryFile
 from PIL import Image
 import os
+import locale
+
+locale.setlocale(locale.LC_ALL, "jp_JP")
 
 os.environ["OPENAI_API_KEY"] = st.secrets.openai_api_key
 
