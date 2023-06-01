@@ -12,7 +12,7 @@ from PIL import Image
 import os
 import locale
 
-locale.setlocale(locale.LC_ALL, "jp_JP.utf8")
+locale.setlocale(locale.LC_ALL, "ja_JP.UTF-8")
 
 os.environ["OPENAI_API_KEY"] = st.secrets.openai_api_key
 
