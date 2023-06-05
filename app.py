@@ -93,4 +93,4 @@ if uploaded_file is not None:
         except Exception:
             response = "エラーが発生しました！　もう一度、質問して下さい。"
             st.error(response)
-            st.session_state.qa.qa["history"].append({"role": "E", "msg": response})
+            st.session_state.qa["history"].append({"role": "E", "msg": response})
